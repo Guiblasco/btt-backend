@@ -14,7 +14,6 @@ try {
   await connectToDataBase(databaseUrl);
 
   startServer(Number(port));
-} catch (error: unknown) {
-  if (error instanceof Error)
-    console.log(chalk.bgRedBright(`There was an error: ${error.message}`));
+} catch (error) {
+  console.log(chalk.bgRedBright(`There was an error: ${error.message}`));
 }
