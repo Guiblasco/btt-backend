@@ -11,7 +11,7 @@ const userSchema = new Schema<UserStructure>(
     username: {
       type: String,
       required: true,
-      unique: true, // importante para evitar duplicados
+      unique: true,
       trim: true,
       lowercase: true,
     },
