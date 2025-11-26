@@ -14,5 +14,10 @@ class MongoUsersRepository implements UsersRepository {
     const createdUser = await this.userModel.create(data);
     return createdUser;
   }
+
+  async deleteUser(id: string): Promise<boolean> {
+    const deletedUser = await this.userModel.findByIdAndDelete(id).exec();
+    return deletedUser !== null;
+  }
 }
 export default MongoUsersRepository;
