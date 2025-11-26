@@ -11,9 +11,17 @@ export default defineConfig([
     },
   },
 
-  // Reglas recomendadas para JS
   js.configs.recommended,
 
-  // Reglas recomendadas para TS
   ...tseslint.configs.recommended,
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
 ]);
