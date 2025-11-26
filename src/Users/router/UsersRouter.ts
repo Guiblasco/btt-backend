@@ -9,5 +9,6 @@ const usersRepository = new MongoUsersRepository(User);
 const usersController = new UsersController(usersRepository);
 
 userRouter.get("/", usersController.getUsers);
+userRouter.post("/", usersController.createUser);
 
 export default userRouter;

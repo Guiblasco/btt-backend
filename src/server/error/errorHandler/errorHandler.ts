@@ -1,10 +1,11 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import type ServerError from "../ServerError/ServerError.js";
 
 export const errorHandler = (
   error: Error,
   _req: Request,
   res: Response,
+  _next: NextFunction,
 ): void => {
   const statusCode = (error as ServerError).statusCode ?? 500;
 

@@ -9,6 +9,7 @@ import userRouter from "../Users/router/UsersRouter.js";
 const app = express();
 
 app.use(morgan("dev"));
+app.use(express.json());
 
 app.get("/", getPing);
 

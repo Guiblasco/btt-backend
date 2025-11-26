@@ -4,3 +4,5 @@ export interface UserStructure {
   username: string;
   password: string;
 }
+
+export type UserCreateData = Omit<UserStructure, "_id">;
