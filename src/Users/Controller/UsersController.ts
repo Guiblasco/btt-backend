@@ -51,6 +51,22 @@ class UsersController {
       next(error);
     }
   };
+
+  deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { userId } = req.params;
+
+      const deletedUser = await this.usersRepository.deleteUser(userId);
+
+      if (!deletedUser) {
+        throw new ServerError("User was not found", 404);
+      }
+
+      res.status(200).json({ message: "User succesfully deleted" });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default UsersController;
