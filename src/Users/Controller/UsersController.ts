@@ -1,8 +1,13 @@
 import type { Response, NextFunction, Request } from "express";
-import { RequestWithUserBody, RequestWithUserId } from "./types.js";
+import {
+  RequestWithUserBody,
+  RequestWithUserId,
+  RequestWithUserUpdateBody,
+} from "./types.js";
 import { UsersRepository } from "../repository/UsersRepository.js";
 import bcrypt from "bcryptjs";
 import ServerError from "../../server/error/ServerError/ServerError.js";
+import { UserUpdateData } from "../types.js";
 
 const SALT_ROUNDS = 10;
 class UsersController {
@@ -68,6 +73,34 @@ class UsersController {
       ) {
         return next(new ServerError("Username already exists", 409));
       }
+      next(error);
+    }
+  };
+
+  updateUser = async (
+    req: RequestWithUserUpdateBody,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { userId } = req.params;
+      const { password, ...user } = req.body;
+      const updateData: UserUpdateData = { ...user };
+
+      if (password) {
+        updateData.password = await bcrypt.hash(password, SALT_ROUNDS);
+      }
+
+      const updatedUser = await this.usersRepository.updateUser(
+        userId,
+        updateData,
+      );
+      if (!updatedUser) {
+        throw new ServerError("User not found", 404);
+      }
+
+      res.status(200).json({ user: updatedUser });
+    } catch (error) {
       next(error);
     }
   };

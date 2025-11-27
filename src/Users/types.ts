@@ -6,3 +6,4 @@ export interface UserStructure {
 }
 
 export type UserCreateData = Omit<UserStructure, "_id">;
+export type UserUpdateData = Partial<UserCreateData>;

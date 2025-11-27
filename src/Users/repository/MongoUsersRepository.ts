@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { UserCreateData, UserStructure } from "../types";
+import { UserCreateData, UserStructure, UserUpdateData } from "../types";
 import { UsersRepository } from "./UsersRepository.js";
 
 class MongoUsersRepository implements UsersRepository {
@@ -18,6 +18,20 @@ class MongoUsersRepository implements UsersRepository {
   async createUser(data: UserCreateData): Promise<UserStructure> {
     const createdUser = await this.userModel.create(data);
     return createdUser;
+  }
+
+  async updateUser(
+    id: string,
+    data: UserUpdateData,
+  ): Promise<UserStructure | null> {
+    const updated = await this.userModel
+      .findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true,
+      })
+      .exec();
+
+    return updated;
   }
 
   async deleteUser(id: string): Promise<boolean> {
