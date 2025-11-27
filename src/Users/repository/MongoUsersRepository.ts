@@ -10,6 +10,11 @@ class MongoUsersRepository implements UsersRepository {
     return users;
   }
 
+  async getUserById(id: string): Promise<UserStructure | null> {
+    const user = await this.userModel.findById(id).exec();
+    return user;
+  }
+
   async createUser(data: UserCreateData): Promise<UserStructure> {
     const createdUser = await this.userModel.create(data);
     return createdUser;
