@@ -10,5 +10,6 @@ const usersController = new UsersController(usersRepository);
 
 userRouter.get("/", usersController.getUsers);
 userRouter.post("/", usersController.createUser);
+userRouter.delete("/:userId", usersController.deleteUser);
 
 export default userRouter;
