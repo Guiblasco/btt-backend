@@ -1,5 +1,5 @@
 import type { Response, NextFunction, Request } from "express";
-import { RequestWithUserBody } from "./types.js";
+import { RequestWithUserBody, RequestWithUserId } from "./types.js";
 import { UsersRepository } from "../repository/UsersRepository.js";
 import bcrypt from "bcryptjs";
 import ServerError from "../../server/error/ServerError/ServerError.js";
@@ -12,6 +12,26 @@ class UsersController {
     try {
       const users = await this.usersRepository.getAll();
       res.status(200).json({ users });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getUserById = async (
+    req: RequestWithUserId,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { userId } = req.params;
+
+      const user = await this.usersRepository.getUserById(userId);
+
+      if (!user) {
+        throw new ServerError("User not found", 404);
+      }
+
+      res.status(200).json({ user });
     } catch (error) {
       next(error);
     }
