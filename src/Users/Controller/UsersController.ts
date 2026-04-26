@@ -149,6 +149,37 @@ class UsersController {
       next(error);
     }
   };
+  login = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { username, password } = req.body as {
+        username: string;
+        password: string;
+      };
+
+      const user = await this.usersRepository.findByUsername(username);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      res.json({
+        message: "Login OK",
+        user: {
+          id: user._id,
+          username: user.username,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Login error" });
+      next(error);
+    }
+  };
 }
 
 export default UsersController;
