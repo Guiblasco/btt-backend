@@ -6,4 +6,5 @@ export interface UsersRepository {
   createUser(data: UserCreateData): Promise<UserStructure>;
   updateUser(id: string, data: UserUpdateData): Promise<UserStructure | null>;
   deleteUser(id: string): Promise<boolean>;
+  findByUsername(username: string): Promise<UserStructure | null>;
 }

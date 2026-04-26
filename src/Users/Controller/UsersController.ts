@@ -120,6 +120,35 @@ class UsersController {
       next(error);
     }
   };
+
+  register = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { name, username, password } = req.body;
+
+      const existingUser = await this.usersRepository.findByUsername(username);
+
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = await this.usersRepository.createUser({
+        name,
+        username,
+        password: hashedPassword,
+      });
+
+      res.status(201).json({
+        id: newUser._id,
+        name: newUser.name,
+        username: newUser.username,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Error creating user" });
+      next(error);
+    }
+  };
 }
 
 export default UsersController;

@@ -19,6 +19,9 @@ class MongoUsersRepository implements UsersRepository {
     const createdUser = await this.userModel.create(data);
     return createdUser;
   }
+  async findByUsername(username: string): Promise<UserStructure | null> {
+    return await this.userModel.findOne({ username });
+  }
 
   async updateUser(
     id: string,
