@@ -11,7 +11,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.get("/", getPing);
+app.get(routes.ping, getPing);
 
 app.use(routes.users, userRouter);
 
