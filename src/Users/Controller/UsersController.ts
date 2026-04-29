@@ -8,6 +8,7 @@ import { UsersRepository } from "../repository/UsersRepository.js";
 import bcrypt from "bcryptjs";
 import ServerError from "../../server/error/ServerError/ServerError.js";
 import { UserUpdateData } from "../types.js";
+import jwt from "jsonwebtoken";
 
 const SALT_ROUNDS = 10;
 class UsersController {
@@ -151,6 +152,7 @@ class UsersController {
   };
   login = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log("login hit");
       const { username, password } = req.body as {
         username: string;
         password: string;
@@ -167,13 +169,18 @@ class UsersController {
       if (!isMatch) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
-
+      const token = jwt.sign(
+        {
+          id: user._id,
+        },
+        process.env.JWT_SECRET!,
+        { expiresIn: "1h" },
+      );
+      console.log("token", token);
+      console.log("jwt env", process.env.JWT_SECRET);
       res.json({
         message: "Login OK",
-        user: {
-          id: user._id,
-          username: user.username,
-        },
+        token,
       });
     } catch (error) {
       res.status(500).json({ message: "Login error" });
